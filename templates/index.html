@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regex Matcher</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .result-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .match-item {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+        .email-validation {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Regex Matcher</h1>
+        
+        <!-- Regex Matching Form -->
+        <form action="/results" method="post">
+            <div class="form-group">
+                <label for="test_string" class="form-label">Test String:</label>
+                <textarea class="form-control" id="test_string" name="test_string" rows="3" required>{{ test_string if test_string else '' }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="regex_pattern" class="form-label">Regex Pattern:</label>
+                <input type="text" class="form-control" id="regex_pattern" name="regex_pattern" value="{{ regex_pattern if regex_pattern else '' }}" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Find Matches</button>
+        </form>
+
+        <!-- Results Section -->
+        {% if matches is not none %}
+        <div class="result-box">
+            <h3>Matches:</h3>
+            {% if matches %}
+                {% for match in matches %}
+                <div class="match-item">{{ match }}</div>
+                {% endfor %}
+            {% else %}
+                <p>No matches found.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="alert alert-danger mt-3">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Email Validation Section -->
+        <div class="email-validation">
+            <h2 class="mb-4">Email Validator</h2>
+            <form action="/validate-email" method="post">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address:</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ email if email else '' }}" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Validate Email</button>
+            </form>
+
+            {% if email %}
+            <div class="result-box mt-3">
+                <h3>Validation Result:</h3>
+                {% if is_valid %}
+                    <div class="alert alert-success">Valid email address!</div>
+                {% else %}
+                    <div class="alert alert-danger">Invalid email address!</div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
